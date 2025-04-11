@@ -10,7 +10,7 @@ REST API, созданный на ASP .NET Core, для управления к�
 * .NET 8.0
 * ASP .NET Core 8.0
 * Entity Framework Core 9.0.4
-* Npgsql дял работы с PostgreSQL
+* Npgsql для работы с PostgreSQL
 * Swagger
 * Встроенный DI-контейнер ASP .NET Core
 ## Запуск проекта
