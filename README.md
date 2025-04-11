@@ -17,7 +17,7 @@ REST API, созданный на ASP .NET Core, для управления к�
 1. Добавьте или отредактируйте строку подключения к серверу PostgreSQL в файле ```appsettings.json```:
    ```json
    "ConnectionStrings": {
-    "DefaultConnection": "Host=localhost;Database=mydb;Username=myuser;Password=mypassword"
+    "DefaultConnection": "Host=localhost;Port=port;Database=mydb;Username=myuser;Password=mypassword"
    }
    ```
 2. Установите зависимости (если не установлены):
