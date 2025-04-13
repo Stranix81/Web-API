@@ -1,10 +1,5 @@
 ﻿using Core.DTOs.Filters;
 using Core.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Core.Models.FunctionsReturnModels;
 
 namespace Infrastructure.Interfaces

@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-//using Microsoft.EntityFrameworkCore;
-using Infrastructure.Data;
-using Core.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using Core.DTOs;
 using Core.DTOs.Filters;
-using Core.Enums;
-using Infrastructure.Services;
 using Infrastructure.Interfaces;
 
-namespace Praktika_test2.Controllers
+namespace API.Controllers
 {
     /// <summary>
     /// Client management
@@ -37,7 +27,7 @@ namespace Praktika_test2.Controllers
         /// <response code="404">No clients found</response>>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GetClientDTO>>> Getclients()
+        public async Task<ActionResult<IEnumerable<GetClientDTO>>> GetClients()
         {
             var clients = await _clientService.GetClientsAsync();
 
@@ -61,7 +51,7 @@ namespace Praktika_test2.Controllers
 
             return client == null 
                 ? NotFound("Invalid ID. No such client found") 
-                : client;
+                : Ok(client);
         }
 
         // GET: api/Client/filtered
@@ -79,7 +69,7 @@ namespace Praktika_test2.Controllers
             var clients = await _clientService.GetClientsFilteredAsync(filter, pagination);
 
             return !clients.Any()
-                ? NotFound("Not clients found for this filter")
+                ? NotFound("No clients found for this filter")
                 : Ok(clients);
         }
 

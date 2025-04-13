@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Core.DTOs.Filters;
+﻿using Core.DTOs.Filters;
 using Core.DTOs;
 using Core.Enums;
 using Infrastructure.Interfaces;
 using Core.Models.FunctionsReturnModels;
 using Core.Models;
 using Microsoft.EntityFrameworkCore;
-using NSwag.Annotations;
 using Infrastructure.Data;
 
 namespace Infrastructure.Services
@@ -49,25 +43,8 @@ namespace Infrastructure.Services
             }
 
             return IncludeClientInfo
-                ? new GetOrderWithClientDTO
-                {
-                    id = order.id,
-                    cost = order.cost,
-                    date = order.date,
-                    time = order.time,
-                    client_id = order.client_id,
-                    client = new GetClientDTO(order.client),
-                    status = order.status
-                }
-                : new GetOrderDTO
-                {
-                    id = order.id,
-                    cost = order.cost,
-                    date = order.date,
-                    time = order.time,
-                    client_id = order.client_id,
-                    status = order.status
-                };
+                ? new GetOrderWithClientDTO(order)
+                : new GetOrderDTO(order);
         }
 
         public async Task<IEnumerable<GetOrderDTO>> GetOrdersFilteredAsync(OrderFilterDTO filter, PaginationDTO pagination)

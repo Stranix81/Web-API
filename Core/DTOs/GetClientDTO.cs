@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Core.Models;
+﻿using Core.Models;
 
 namespace Core.DTOs
 {
     public class GetClientDTO
     {
+        public GetClientDTO() { }
         public GetClientDTO(Client client)
         {
             id = client.id;

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 using Core.Models;
 using Core.Enums;
 
@@ -44,6 +39,19 @@ namespace Core.DTOs
 
     public class GetOrderWithClientDTO : GetOrderDTO
     {
+        public GetOrderWithClientDTO() { }
+
+        public GetOrderWithClientDTO(Order order)
+        {
+            id = order.id;
+            cost = order.cost;
+            date = order.date;
+            time = order.time;
+            client_id = order.client_id;
+            status = order.status;
+            client = new GetClientDTO(order.client);
+        }
+
         [JsonPropertyOrder(6)]
         public GetClientDTO client { get; set; }
     }

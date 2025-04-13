@@ -1,26 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Infrastructure.Data;
-using Core.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using Core.Models.FunctionsReturnModels;
-using Core.Enums;
 using Core.DTOs;
 using Core.DTOs.Filters;
 using Infrastructure.Interfaces;
 using NSwag.Annotations;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using static NuGet.Packaging.PackagingConstants;
-using Humanizer;
-using System.Data;
-using System.Net;
-using Infrastructure.Services;
 
-namespace Praktika_test2.Controllers
+
+namespace API.Controllers
 {
     /// <summary>
     /// Order management
@@ -44,7 +30,7 @@ namespace Praktika_test2.Controllers
         /// <response code="404">No orders found</response>>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GetOrderDTO>>> Getorders()
+        public async Task<ActionResult<IEnumerable<GetOrderDTO>>> GetOrders()
         {
             var orders = await _orderService.GetOrdersAsync();
 
@@ -67,7 +53,7 @@ namespace Praktika_test2.Controllers
         {
             var order = await _orderService.GetOrderAsync(id, IncludeClientInfo);
 
-            return order == null ? NotFound("Invalid ID. No order found") : order;
+            return order == null ? NotFound("Invalid ID. No order found") : Ok(order);
         }
 
         /// <summary>
@@ -118,7 +104,7 @@ namespace Praktika_test2.Controllers
             var costs = await _orderService.GetAvgCostsByHourAsync();
 
             return !costs.Any() 
-                ? NotFound() 
+                ? NotFound("No such list found") 
                 : Ok(costs);
         }
 
