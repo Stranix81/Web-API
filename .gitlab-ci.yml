@@ -18,7 +18,3 @@ build:
     - dotnet restore $SOLUTION_FILE
     - dotnet build $SOLUTION_FILE --configuration Release --no-restore
     - dotnet publish $API_PROJECT --configuration Release --no-build --output $PUBLISH_OUTPUT_DIR
-  artifacts:
-    paths:
-      - $PUBLISH_OUTPUT_DIR/
-    expire_in: 1 week
