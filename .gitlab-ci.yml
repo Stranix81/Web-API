@@ -2,7 +2,7 @@ stages:
   - build
 
 variables:
-  SOLUTION_FILE: "'Web API.sln'"
+  SOLUTION_FILE: "WebAPI.sln"
   API_PROJECT: "API/API.csproj"
   PUBLISH_OUTPUT_DIR: "publish-output"
   ASPNETCORE_ENVIRONMENT: "Production"
