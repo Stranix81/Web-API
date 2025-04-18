@@ -22,8 +22,7 @@ build:
     - dotnet publish $API_PROJECT --configuration Release --no-build --output $PUBLISH_OUTPUT_DIR
   artifacts:
     paths:
-      - Tests/bin/
-      - Tests/obj/
+      - Tests/bin/Release/
       - $PUBLISH_OUTPUT_DIR/
     expire_in: 1h
 
