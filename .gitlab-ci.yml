@@ -25,7 +25,10 @@ test:
   image: mcr.microsoft.com/dotnet/sdk:8.0
   script:
     - dotnet test $TEST_PROJECT --configuration Release --no-build --logger "trx;LogFileName=testresults.trx"
+    - dotnet tool install -g trx2junit
+    - export PATH="$PATH:$HOME/.dotnet/tools"
+    - trx2junit **/testresults.trx
   artifacts:
     reports:
-      dotnet: "**/*testresults.trx"
+      junit: "**/testresults.xml"
     when: always
