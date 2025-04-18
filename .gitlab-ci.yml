@@ -5,7 +5,7 @@ stages:
 variables:
   SOLUTION_FILE: "WebAPI.sln"
   API_PROJECT: "API/API.csproj"
-  TEST_PROJECT: "Tests/Tests.csproj"
+  TEST_PROJECT_DIR: "Tests"
   PUBLISH_OUTPUT_DIR: "publish-output"
   ASPNETCORE_ENVIRONMENT: "Production"
   ASPNETCORE_URLS: "http://*:5000"
@@ -25,11 +25,15 @@ test:
   stage: test
   image: mcr.microsoft.com/dotnet/sdk:8.0
   script:
-    - dotnet test $TEST_PROJECT --configuration Release --no-build --logger "trx;LogFileName=testresults.trx"
     - dotnet tool install -g trx2junit
     - export PATH="$PATH:$HOME/.dotnet/tools"
+
+    - cd $TEST_PROJECT_DIR
+    - dotnet test --configuration Release --no-build --logger "trx;LogFileName=testresults.trx"
+    - cd ..
+
     - trx2junit **/testresults.trx
   artifacts:
     reports:
-      junit: "**/testresults.xml"
+      junit: "testresults.xml"
     when: always
