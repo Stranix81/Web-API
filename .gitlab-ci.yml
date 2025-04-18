@@ -1,0 +1,50 @@
+stages:
+  - build
+  - test
+
+variables:
+  SOLUTION_FILE: "WebAPI.sln"
+  API_PROJECT: "API/API.csproj"
+  TEST_PROJECT: "Tests/Tests.csproj"
+  PUBLISH_OUTPUT_DIR: "publish-output"
+  ASPNETCORE_ENVIRONMENT: "Production"
+  ASPNETCORE_URLS: "http://*:5000"
+
+before_script:
+  - export PATH="$PATH:$HOME/.dotnet/tools"
+
+build:
+  stage: build
+  image: mcr.microsoft.com/dotnet/sdk:8.0
+  script:
+    - dotnet restore $SOLUTION_FILE
+    - dotnet build $SOLUTION_FILE --configuration Release --no-restore
+    - dotnet publish $API_PROJECT --configuration Release --no-build --output $PUBLISH_OUTPUT_DIR
+
+        # Вывод размера артефактов перед загрузкой
+    - echo "Размер артефактов перед загрузкой:"
+    - du -sh $PUBLISH_OUTPUT_DIR/ || echo "Артефакты не найдены"
+    - du -sh Tests/bin/Release/net8.0/ || echo "Тестовые бинарники не найдены"
+  artifacts:
+    paths:
+      - $PUBLISH_OUTPUT_DIR/
+      - Tests/bin/Release/net8.0/
+    expire_in: 1h
+    when: always
+
+test:
+  stage: test
+  image: mcr.microsoft.com/dotnet/sdk:8.0
+  dependencies:
+    - build
+  script:
+    - dotnet tool install -g trx2junit
+    - export PATH="$PATH:$HOME/.dotnet/tools"
+
+    - dotnet test $TEST_PROJECT --configuration Release --no-build --logger "trx;LogFileName=testresults.trx"
+
+    - trx2junit testresults.trx
+  artifacts:
+    reports:
+      junit: "testresults.xml"
+    when: always
