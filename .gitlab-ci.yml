@@ -27,13 +27,9 @@ test:
   script:
     - dotnet tool install -g trx2junit
     - export PATH="$PATH:$HOME/.dotnet/tools"
-
-    - cd $TEST_PROJECT_DIR
-    - dotnet test $SOLUTION_FILE --configuration Release --no-build --logger "trx;LogFileName=testresults.trx"
-    - cd ..
-
-    - trx2junit **/testresults.trx
+    - dotnet test $TEST_PROJECT --configuration Release --no-build --logger "trx;LogFileName=testresults.trx"
+    - trx2junit Tests/**/testresults.trx
   artifacts:
     reports:
-      junit: "testresults.xml"
+      junit: "Tests/**/testresults.xml"
     when: always
