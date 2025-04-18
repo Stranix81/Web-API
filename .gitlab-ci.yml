@@ -1,5 +1,6 @@
 stages:
   - build
+  - test
 
 variables:
   SOLUTION_FILE: "WebAPI.sln"
@@ -18,3 +19,13 @@ build:
     - dotnet restore $SOLUTION_FILE
     - dotnet build $SOLUTION_FILE --configuration Release --no-restore
     - dotnet publish $API_PROJECT --configuration Release --no-build --output $PUBLISH_OUTPUT_DIR
+
+test:
+  stage: test
+  image: mcr.microsoft.com/dotnet/sdk:8.0
+  script:
+    - dotnet test $TEST_PROJECT --configuration Release --no-build --logger "trx;LogFileName=testresults.trx"
+  artifacts:
+    reports:
+      dotnet: "**/*testresults.trx"
+    when: always
