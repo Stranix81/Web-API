@@ -22,9 +22,11 @@ build:
     - dotnet publish $API_PROJECT --configuration Release --no-build --output $PUBLISH_OUTPUT_DIR
   artifacts:
     paths:
-      - Tests/bin/Release/net8.0/*.dll
-      - Test/bin/Release/net8.0/*.json
-      - $PUBLISH_OUTPUT_DIR/
+      - Tests/bin/Release/net8.0/Tests.dll
+      - Tests/bin/Release/net8.0/Tests.deps.dll
+      - Tests/bin/Release/net8.0/Tests.runtimeconfig.json
+      - $PUBLISH_OUTPUT_DIR/API.dll
+      - $PUBLISH_OUTPUT_DIR/appsettings.json
     expire_in: 1h
 
 test:
