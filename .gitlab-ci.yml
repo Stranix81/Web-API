@@ -5,7 +5,7 @@ stages:
 variables:
   SOLUTION_FILE: "WebAPI.sln"
   API_PROJECT: "API/API.csproj"
-  TEST_PROJECT_DIR: "Tests/Tests.csproj"
+  TEST_PROJECT: "Tests/Tests.csproj"
   PUBLISH_OUTPUT_DIR: "publish-output"
   ASPNETCORE_ENVIRONMENT: "Production"
   ASPNETCORE_URLS: "http://*:5000"
@@ -22,28 +22,24 @@ build:
     - dotnet publish $API_PROJECT --configuration Release --no-build --output $PUBLISH_OUTPUT_DIR
   artifacts:
     paths:
-      - Tests/bin/Release/net8.0/Tests.dll
-      - Tests/bin/Release/net8.0/Tests.deps.dll
-      - Tests/bin/Release/net8.0/Tests.runtimeconfig.json
-      - $PUBLISH_OUTPUT_DIR/API.dll
-      - $PUBLISH_OUTPUT_DIR/appsettings.json
+      - $PUBLISH_OUTPUT_DIR/
+      - Tests/bin/Release/net8.0/
     expire_in: 1h
+    when: always
 
 test:
   stage: test
   image: mcr.microsoft.com/dotnet/sdk:8.0
+  dependencies:
+    - build
   script:
     - dotnet tool install -g trx2junit
     - export PATH="$PATH:$HOME/.dotnet/tools"
 
     - dotnet test $TEST_PROJECT --configuration Release --no-build --logger "trx;LogFileName=testresults.trx"
-
-    - trx2junit Tests/**/testresults.trx
+    
+    - trx2junit testresults.trx
   artifacts:
     reports:
-      junit: "Tests/**/testresults.xml"
+      junit: "testresults.xml"
     when: always
-    paths:
-      - Tests/**/testresults.trx
-      - Tests/**/testresults.xml
-    expire_in: 1h
