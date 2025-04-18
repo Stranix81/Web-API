@@ -29,7 +29,7 @@ test:
     - export PATH="$PATH:$HOME/.dotnet/tools"
 
     - cd $TEST_PROJECT_DIR
-    - dotnet test --configuration Release --no-build --logger "trx;LogFileName=testresults.trx"
+    - dotnet test $SOLUTION_FILE --configuration Release --no-build --logger "trx;LogFileName=testresults.trx"
     - cd ..
 
     - trx2junit **/testresults.trx
