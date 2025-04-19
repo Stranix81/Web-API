@@ -1,6 +1,7 @@
 stages:
   - build
   - test
+  - deploy
 
 variables:
   SOLUTION_FILE: "WebAPI.sln"
@@ -9,6 +10,10 @@ variables:
   PUBLISH_OUTPUT_DIR: "publish-output"
   ASPNETCORE_ENVIRONMENT: "Production"
   ASPNETCORE_URLS: "http://*:5000"
+  POSTGRES_DB: "myapp_db"
+  POSTGRES_USER: "postgres"
+  POSTGRES_PASSWORD: "SecurePassword123"
+  CONNECTION_STRING: "Host=postgres;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
 
 before_script:
   - export PATH="$PATH:$HOME/.dotnet/tools"
@@ -20,31 +25,45 @@ build:
     - dotnet restore $SOLUTION_FILE
     - dotnet build $SOLUTION_FILE --configuration Release --no-restore
     - dotnet publish $API_PROJECT --configuration Release --no-build --output $PUBLISH_OUTPUT_DIR
-
-        # Вывод размера артефактов перед загрузкой
-    - echo "Размер артефактов перед загрузкой:"
-    - du -sh $PUBLISH_OUTPUT_DIR/ || echo "Артефакты не найдены"
-    - du -sh Tests/bin/Release/net8.0/ || echo "Тестовые бинарники не найдены"
   artifacts:
     paths:
       - $PUBLISH_OUTPUT_DIR/
-      - Tests/bin/Release/net8.0/
     expire_in: 1h
-    when: always
 
 test:
   stage: test
   image: mcr.microsoft.com/dotnet/sdk:8.0
-  dependencies:
-    - build
+  needs: ["build"]
   script:
-    - dotnet tool install -g trx2junit
-    - export PATH="$PATH:$HOME/.dotnet/tools"
-
     - dotnet test $TEST_PROJECT --configuration Release --no-build --logger "trx;LogFileName=testresults.trx"
-
+    - dotnet tool install -g trx2junit
     - trx2junit testresults.trx
   artifacts:
     reports:
       junit: "testresults.xml"
     when: always
+
+deploy:
+  stage: deploy
+  image: mcr.microsoft.com/dotnet/aspnet:8.0
+  services:
+    - name: postgres:latest
+      alias: postgres
+      variables:
+        POSTGRES_DB: $POSTGRES_DB
+        POSTGRES_USER: $POSTGRES_USER
+        POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+  script:
+    - dotnet ef database update --project $API_PROJECT --connection "$CONNECTION_STRING" || echo "Migrations not configured"
+    
+    - cd $PUBLISH_OUTPUT_DIR
+    - dotnet API.dll --urls=$ASPNETCORE_URLS &
+    - sleep 15
+    
+    - curl -sSf http://localhost:5000/health || exit 1
+    - echo "API успешно запущен на http://localhost:5000"
+  environment:
+    name: production
+    url: http://your-server-ip:5000
+  only:
+    - main
