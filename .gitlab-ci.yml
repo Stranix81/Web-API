@@ -32,7 +32,7 @@ test_job:
   stage: test
   tags: [docker]
   script:
-    - dotnet test --configuration Release --no-build --verbosity normal
+    - dotnet test --configuration Release --no-build
   timeout: 5 minutes
 
 deploy_job:
