@@ -27,8 +27,7 @@ build_job:
   stage: build
   tags: [docker]
   script:
-    - dotnet build --configuration Release --no-restore --no-dependencies
-
+    - dotnet build --configuration Release --no-restore
 test_job:
   stage: test
   tags: [docker]
