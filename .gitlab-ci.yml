@@ -38,6 +38,8 @@ test:
 deploy:
   stage: deploy
   image: mcr.microsoft.com/dotnet/sdk:8.0
+  dependencies:
+    - build
   services:
     - name: postgres:latest
       alias: postgres
@@ -56,7 +58,7 @@ deploy:
     - dotnet ef database update --project $API_PROJECT --connection "$CONNECTION_STRING" || echo "Migrations not configured"
 
     - cd $PUBLISH_OUTPUT_DIR
-    - dotnet test_API.dll --urls=$ASPNETCORE_URLS &
+    - dotnet WebAPI.dll --urls=$ASPNETCORE_URLS &
     - sleep 15
 
   environment:
