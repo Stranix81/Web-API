@@ -58,7 +58,7 @@ deploy:
     - dotnet ef database update --project $API_PROJECT --connection "$CONNECTION_STRING" || echo "Migrations not configured"
 
     - cd $PUBLISH_OUTPUT_DIR
-    - dotnet WebAPI.dll --urls=$ASPNETCORE_URLS &
+    - dotnet API.dll --urls=$ASPNETCORE_URLS &
     - sleep 15
 
   environment:
