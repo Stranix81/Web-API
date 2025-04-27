@@ -24,6 +24,9 @@ build:
     - dotnet restore $SOLUTION_FILE
     - dotnet build $SOLUTION_FILE --configuration Release --no-restore
     - dotnet publish $API_PROJECT --configuration Release --no-build --output $PUBLISH_OUTPUT_DIR
+  artifacts:
+    paths:
+      - $PUBLISH_OUTPUT_DIR/
 
 test:
   stage: test
@@ -57,8 +60,8 @@ deploy:
 
     - dotnet ef database update --project $API_PROJECT --connection "$CONNECTION_STRING" || echo "Migrations not configured"
 
-    - cd $PUBLISH_OUTPUT_DIR
-    - dotnet API.dll --urls=$ASPNETCORE_URLS &
+    #- cd $PUBLISH_OUTPUT_DIR
+    - dotnet $PUBLISH_OUTPUT_DIR/API.dll --urls=$ASPNETCORE_URLS &
     - sleep 15
 
   environment:
