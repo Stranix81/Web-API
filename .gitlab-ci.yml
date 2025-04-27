@@ -59,13 +59,3 @@ deploy:
     - timeout 30s bash -c 'until pg_isready -h postgres -U postgres; do sleep 1; done' 
 
     - dotnet ef database update --project $API_PROJECT --connection "$CONNECTION_STRING" || echo "Migrations not configured"
-
-    #- cd $PUBLISH_OUTPUT_DIR
-    - dotnet $PUBLISH_OUTPUT_DIR/API.dll --urls=$ASPNETCORE_URLS &
-    - sleep 15
-
-  environment:
-    name: production
-    url: http://172.17.0.2:5245/swagger
-  only:
-    - main
