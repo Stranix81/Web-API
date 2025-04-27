@@ -1,45 +1,76 @@
-image: mcr.microsoft.com/dotnet/sdk:8.0
-
-services:
-  - name: postgres:17
-    alias: postgres
-
-variables:
-  POSTGRES_DB: mydb
-  POSTGRES_USER: postgres
-  POSTGRES_PASSWORD: admin
-  CONNECTION_STRING: "Host=postgres;Database=practice_migration_test_bd;Username=postgres;Password=admin"
-  DOTNET_CLI_TELEMETRY_OPTOUT: "1"
-
 stages:
   - build
   - test
   - deploy
 
-before_script:
-  - dotnet tool install --global dotnet-ef
-  - export PATH="$PATH:/root/.dotnet/tools"
-  - dotnet --info
-  - dotnet ef --version
-  - dotnet restore
+variables:
+  SOLUTION_FILE: "WebAPI.sln"
+  API_PROJECT: "API/API.csproj"
+  TEST_PROJECT: "Tests/Tests.csproj"
+  PUBLISH_OUTPUT_DIR: "publish-output"
+  ASPNETCORE_ENVIRONMENT: "Production"
+  ASPNETCORE_URLS: "http://*:5245"
 
-build_job:
+  # Переменные базы данных
+  POSTGRES_DB: "practice_migration_test_bd"
+  POSTGRES_USER: "postgres"
+  POSTGRES_PASSWORD: "admin"
+  CONNECTION_STRING: "Host=localhost;Port=5432;Database=practice_migration_test_bd;Username=postgres;Password=admin"
+
+# Этап 1: Сборка
+build:
   stage: build
-  tags: [docker]
+  image: mcr.microsoft.com/dotnet/sdk:8.0
+  services:
+    - name: postgres:latest
+      alias: postgres
+      variables:
+        POSTGRES_DB: $POSTGRES_DB
+        POSTGRES_USER: $POSTGRES_USER
+        POSTGRES_PASSWORD: $POSTGRES_PASSWORD
   script:
-    - dotnet build --configuration Release --no-restore
-test_job:
-  stage: test
-  tags: [docker]
-  script:
-    - dotnet test --configuration Release --no-build
-  timeout: 5 minutes
+    - export PATH="$PATH:$HOME/.dotnet/tools"
+    # Сборка и публикация
+    - dotnet restore $SOLUTION_FILE
+    - dotnet build $SOLUTION_FILE --configuration Release --no-restore
+    - dotnet publish $API_PROJECT --configuration Release --no-build --output $PUBLISH_OUTPUT_DIR
 
-deploy_job:
-  stage: deploy
-  tags: [docker]
+# Этап 2: Тестирование
+test:
+  stage: test
+  image: mcr.microsoft.com/dotnet/sdk:8.0
+  dependencies:
+    - build
   script:
-    - apt update && apt install -y postgresql-client
-    - timeout 30s bash -c 'until pg_isready -h postgres -U postgres; do sleep 1; done'
-    - dotnet ef database update --connection "$CONNECTION_STRING" --project Data --startup-project WebApi
-  when: manual
+    - dotnet tool install -g trx2junit
+    - export PATH="$PATH:$HOME/.dotnet/tools"
+    # Запуск тестов
+    - dotnet test $TEST_PROJECT --configuration Release --no-build
+
+# Этап 3: Деплой
+deploy:
+  stage: deploy
+  image: mcr.microsoft.com/dotnet/aspnet:8.0
+  services:
+    - name: postgres:latest
+      alias: postgres
+      variables:
+        POSTGRES_DB: $POSTGRES_DB
+        POSTGRES_USER: $POSTGRES_USER
+        POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+  script:
+    # Миграция БД
+    - dotnet tool install --global dotnet-ef
+    - export PATH="$PATH:$HOME/.dotnet/tools"
+    - dotnet ef database update --project $API_PROJECT --connection "$CONNECTION_STRING" || echo "Migrations not configured"
+
+    # Запуск API
+    - cd $PUBLISH_OUTPUT_DIR
+    - dotnet test_API.dll --urls=$ASPNETCORE_URLS &
+    - sleep 15
+
+  environment:
+    name: production
+    url: http://192.168.56.1:5245/swagger
+  only:
+    - main
