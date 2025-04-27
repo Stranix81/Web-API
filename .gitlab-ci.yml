@@ -30,7 +30,11 @@ build:
     - export PATH="$PATH:$HOME/.dotnet/tools"
     - dotnet restore $SOLUTION_FILE
     - dotnet build $SOLUTION_FILE --configuration Release --no-restore
+    - mkdir -p build_artifacts/tests
+    - rm -rf build_artifacts/tests/*
+    - cp Tests/bin/Release/net8.0/Tests.dll build_artifacts/tests/
     - dotnet publish $API_PROJECT --configuration Release --no-build --output $PUBLISH_OUTPUT_DIR
+
 
 test:
   stage: test
@@ -40,7 +44,7 @@ test:
   script:
     - dotnet tool install -g trx2junit
     - export PATH="$PATH:$HOME/.dotnet/tools"
-    - dotnet vstest $TEST_DLL
+    - dotnet vstest build_artifacts/tests/Tests.dll
 
 deploy:
   stage: deploy
