@@ -6,7 +6,7 @@ stages:
 variables:
   SOLUTION_FILE: "WebAPI.sln"
   API_PROJECT: "API/API.csproj"
-  TEST_PROJECT: "Tests/Tests.csproj"
+  TEST_DLL: "/builds/root/web-api/Tests/bin/Release/net8.0/Tests.dll"
   PUBLISH_OUTPUT_DIR: "publish-output"
   ASPNETCORE_ENVIRONMENT: "Production"
   ASPNETCORE_URLS: "http://*:5245"
@@ -40,7 +40,7 @@ test:
   script:
     - dotnet tool install -g trx2junit
     - export PATH="$PATH:$HOME/.dotnet/tools"
-    - dotnet vstest $TEST_PROJECT --configuration Release --no-build
+    - dotnet vstest $TEST_DLL
 
 deploy:
   stage: deploy
