@@ -14,24 +14,16 @@ variables:
   POSTGRES_DB: "practice_migration_test_bd"
   POSTGRES_USER: "postgres"
   POSTGRES_PASSWORD: "admin"
-  CONNECTION_STRING: "Host=localhost;Port=5432;Database=practice_migration_test_bd;Username=postgres;Password=admin"
+  CONNECTION_STRING: "Host=postgres;Port=5432;Database=practice_migration_test_bd;Username=postgres;Password=admin"
 
 build:
   stage: build
   image: mcr.microsoft.com/dotnet/sdk:8.0
-  services:
-    - name: postgres:latest
-      alias: postgres
-      variables:
-        POSTGRES_DB: $POSTGRES_DB
-        POSTGRES_USER: $POSTGRES_USER
-        POSTGRES_PASSWORD: $POSTGRES_PASSWORD
   script:
     - export PATH="$PATH:$HOME/.dotnet/tools"
     - dotnet restore $SOLUTION_FILE
     - dotnet build $SOLUTION_FILE --configuration Release --no-restore
     - dotnet publish $API_PROJECT --configuration Release --no-build --output $PUBLISH_OUTPUT_DIR
-
 
 test:
   stage: test
@@ -45,7 +37,7 @@ test:
 
 deploy:
   stage: deploy
-  image: mcr.microsoft.com/dotnet/aspnet:8.0
+  image: mcr.microsoft.com/dotnet/sdk:8.0
   services:
     - name: postgres:latest
       alias: postgres
@@ -54,8 +46,13 @@ deploy:
         POSTGRES_USER: $POSTGRES_USER
         POSTGRES_PASSWORD: $POSTGRES_PASSWORD
   script:
+    - apt-get update
+    - apt-get install -y postgresql-client
     - dotnet tool install --global dotnet-ef
     - export PATH="$PATH:$HOME/.dotnet/tools"
+
+    - timeout 30s bash -c 'until pg_isready -h postgres -U postgres; do sleep 1; done' 
+
     - dotnet ef database update --project $API_PROJECT --connection "$CONNECTION_STRING" || echo "Migrations not configured"
 
     - cd $PUBLISH_OUTPUT_DIR
@@ -64,6 +61,6 @@ deploy:
 
   environment:
     name: production
-    url: http://192.168.56.1:5245/swagger
+    url: http://172.17.0.2:5245/swagger
   only:
     - main
