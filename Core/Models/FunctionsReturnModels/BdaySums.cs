@@ -2,10 +2,10 @@
 {
     public class BdaySums
     {
-        public decimal sum { get; set; }
+        public decimal Sum { get; set; }
 
-        public string client_name { get; set; } = "Ivan";
+        public string ClientName { get; set; } = "Ivan";
 
-        public string client_lastname { get; set; } = "Ivanov";
+        public string ClientLastname { get; set; } = "Ivanov";
     }
 }

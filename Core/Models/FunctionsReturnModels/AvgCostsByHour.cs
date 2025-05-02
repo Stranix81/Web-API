@@ -2,8 +2,8 @@
 {
     public class AvgCostsByHour
     {
-        public decimal hour { get; set; }
+        public decimal Hour { get; set; }
 
-        public decimal avg_cost { get; set; }
+        public decimal AvgCost { get; set; }
     }
 }

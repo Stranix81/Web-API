@@ -24,8 +24,8 @@ namespace Tests.Controllers
         {
             var orders = new List<GetOrderDTO>
             {
-                new GetOrderDTO { id = 1 },
-                new GetOrderDTO { id = 2 }
+                new GetOrderDTO { Id = 1 },
+                new GetOrderDTO { Id = 2 }
             };
 
             _orderServiceMock
@@ -40,12 +40,12 @@ namespace Tests.Controllers
 
             for (int i = 0; i < orders.Count; i++)
             {
-                Assert.Equal(orders[i].id, response[i].id);
-                Assert.Equal(orders[i].cost, response[i].cost);
-                Assert.Equal(orders[i].date, response[i].date);
-                Assert.Equal(orders[i].time, response[i].time);
-                Assert.Equal(orders[i].client_id, response[i].client_id);
-                Assert.Equal(orders[i].status, response[i].status);
+                Assert.Equal(orders[i].Id, response[i].Id);
+                Assert.Equal(orders[i].Cost, response[i].Cost);
+                Assert.Equal(orders[i].Date, response[i].Date);
+                Assert.Equal(orders[i].Time, response[i].Time);
+                Assert.Equal(orders[i].ClientId, response[i].ClientId);
+                Assert.Equal(orders[i].Status, response[i].Status);
             }
         }
 
@@ -65,7 +65,7 @@ namespace Tests.Controllers
         [Fact]
         public async Task GetOrder_ReturnsGetOrderDTO()
         {
-            var testOrder = new GetOrderDTO { id = 1 };
+            var testOrder = new GetOrderDTO { Id = 1 };
 
             _orderServiceMock
                 .Setup(s => s.GetOrderAsync(1, false))
@@ -118,7 +118,7 @@ namespace Tests.Controllers
         [Fact]
         public async Task PostOrder_ReturnsCreatedOrder()
         {
-            var testOrder = new GetOrderDTO { id = 1 };
+            var testOrder = new GetOrderDTO { Id = 1 };
 
             _orderServiceMock
                 .Setup(s => s.PostOrderAsync(It.IsAny<PostPutOrderDTO>()))

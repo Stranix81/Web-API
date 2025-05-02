@@ -6,23 +6,23 @@ namespace Core.Models
     public class Order
     {
         [Required]
-        public int id { get; set; }
+        public int Id { get; set; }
 
         [Required]
-        public decimal cost { get; set; }
+        public decimal Cost { get; set; }
 
         [Required]
-        public DateOnly date { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+        public DateOnly Date { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 
         [Required]
-        public TimeOnly time { get; set; } = TimeOnly.FromDateTime(DateTime.Now);
+        public TimeOnly Time { get; set; } = TimeOnly.FromDateTime(DateTime.Now);
 
         [Required]
-        public int client_id { get; set; }
+        public int ClientId { get; set; }
 
-        public Client? client { get; set; }
+        public Client? Client { get; set; }
 
         [Required]
-        public OrderStatus status { get; set; }
+        public OrderStatus Status { get; set; }
     }
 }

@@ -23,8 +23,8 @@ namespace Tests.Controllers
         {
             var clients = new List<GetClientDTO>
             {
-                new GetClientDTO { id = 1 },
-                new GetClientDTO { id = 2 }
+                new GetClientDTO { Id = 1 },
+                new GetClientDTO { Id = 2 }
             };
 
             _clientServiceMock
@@ -39,10 +39,10 @@ namespace Tests.Controllers
 
             for(int i = 0; i < clients.Count; i++)
             {
-                Assert.Equal(clients[i].id, response[i].id);
-                Assert.Equal(clients[i].name, response[i].name);
-                Assert.Equal(clients[i].lastname, response[i].lastname);
-                Assert.Equal(clients[i].birth_date, response[i].birth_date);
+                Assert.Equal(clients[i].Id, response[i].Id);
+                Assert.Equal(clients[i].Name, response[i].Name);
+                Assert.Equal(clients[i].Lastname, response[i].Lastname);
+                Assert.Equal(clients[i].BirthDate, response[i].BirthDate);
             }
         }
 
@@ -65,7 +65,7 @@ namespace Tests.Controllers
             var clientId = 1;
             var client = new GetClientDTO 
             { 
-                id = clientId 
+                Id = clientId 
             };
 
             _clientServiceMock
@@ -76,7 +76,7 @@ namespace Tests.Controllers
 
             var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
             var response = Assert.IsType<GetClientDTO>(okResult.Value);
-            Assert.Equal(clientId, response?.id);
+            Assert.Equal(clientId, response?.Id);
         }
 
         [Fact]
@@ -131,7 +131,7 @@ namespace Tests.Controllers
 
             var expectedClient = new GetClientDTO
             {
-                id = 1
+                Id = 1
             };
 
             _clientServiceMock

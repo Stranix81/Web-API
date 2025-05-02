@@ -35,18 +35,18 @@ namespace Infrastructure.Services
             var query = _context.clients.AsQueryable();
 
             if (filter.name != null)
-                query = query.Where(с => с.name == filter.name);
+                query = query.Where(с => с.Name == filter.name);
             if (filter.lastname != null)
-                query = query.Where(с => с.lastname == filter.lastname);
+                query = query.Where(с => с.Lastname == filter.lastname);
             if (filter.birth_date != null)
-                query = query.Where(с => с.birth_date == filter.birth_date);
+                query = query.Where(с => с.BirthDate == filter.birth_date);
 
 
             var page = pagination.Page;
             var pageSize = pagination.PageSize;
 
             var clients = await query
-                .OrderBy(c => c.id)
+                .OrderBy(c => c.Id)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .Select(c => new GetClientDTO(c))
@@ -59,9 +59,9 @@ namespace Infrastructure.Services
         {
             Client client = new Client
             {
-                name = dto.name,
-                lastname = dto.lastname,
-                birth_date = dto.birth_date
+                Name = dto.Name,
+                Lastname = dto.Lastname,
+                BirthDate = dto.BirthDate
             };
 
             _context.clients.Add(client);
@@ -74,10 +74,10 @@ namespace Infrastructure.Services
         {
             Client newClient = new Client
             {
-                id = id,
-                name = dto.name,
-                lastname = dto.lastname,
-                birth_date = dto.birth_date
+                Id = id,
+                Name = dto.Name,
+                Lastname = dto.Lastname,
+                BirthDate = dto.BirthDate
             };
 
             _context.Entry(newClient).State = EntityState.Modified;
@@ -117,7 +117,7 @@ namespace Infrastructure.Services
 
         public bool ClientExists(int id)
         {
-            return _context.clients.Any(e => e.id == id);
+            return _context.clients.Any(e => e.Id == id);
         }
     }
 }

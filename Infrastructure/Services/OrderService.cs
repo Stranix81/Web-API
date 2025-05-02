@@ -27,12 +27,12 @@ namespace Infrastructure.Services
 
         public async Task<GetOrderDTO> GetOrderAsync(int id, bool IncludeClientInfo = false)
         {
-            var query = _context.orders.Where(o => o.id == id);
+            var query = _context.orders.Where(o => o.Id == id);
 
 
             if (IncludeClientInfo)
             {
-                query = query.Include(o => o.client);
+                query = query.Include(o => o.Client);
             }
 
             var order = await query.FirstOrDefaultAsync();
@@ -52,21 +52,21 @@ namespace Infrastructure.Services
             var query = _context.orders.AsQueryable();
 
             if (filter.cost != null)
-                query = query.Where(o => o.cost == filter.cost);
+                query = query.Where(o => o.Cost == filter.cost);
             if (filter.date != null)
-                query = query.Where(o => o.date == filter.date);
+                query = query.Where(o => o.Date == filter.date);
             if (filter.time != null)
-                query = query.Where(o => o.time == filter.time);
+                query = query.Where(o => o.Time == filter.time);
             if (filter.client_id != null)
-                query = query.Where(o => o.client_id == filter.client_id);
+                query = query.Where(o => o.ClientId == filter.client_id);
             if (filter.status != null && Enum.TryParse<OrderStatus>(filter.status, out var statusFilter))
-                query = query.Where(o => o.status.ToString() == filter.status);
+                query = query.Where(o => o.Status.ToString() == filter.status);
 
             var page = pagination.Page;
             var pageSize = pagination.PageSize;
 
             var orders = await query
-                .OrderBy(o => o.id)
+                .OrderBy(o => o.Id)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .Select(o => new GetOrderDTO(o))
@@ -95,21 +95,21 @@ namespace Infrastructure.Services
 
         public async Task<GetOrderDTO> PostOrderAsync(PostPutOrderDTO dto)
         {
-            if (!Enum.TryParse(dto.status, out OrderStatus status))
+            if (!Enum.TryParse(dto.Status, out OrderStatus status))
             {
                 return null;
             }
 
-            if (!await _context.clients.AnyAsync(c => c.id == dto.client_id))
+            if (!await _context.clients.AnyAsync(c => c.Id == dto.ClientId))
                 return null;
 
             var order = new Order
             {
-                cost = dto.cost,
-                date = dto.date,
-                time = dto.time,
-                client_id = dto.client_id,
-                status = status
+                Cost = dto.Cost,
+                Date = dto.Date,
+                Time = dto.Time,
+                ClientId = dto.ClientId,
+                Status = status
             };
 
             _context.orders.Add(order);
@@ -120,22 +120,22 @@ namespace Infrastructure.Services
 
         public async Task<int> PutOrderAsync(int id, PostPutOrderDTO order)
         {
-            if (!Enum.TryParse(order.status, out OrderStatus newStatus))
+            if (!Enum.TryParse(order.Status, out OrderStatus newStatus))
             {
                 return -1;
             }
 
-            if (!await _context.clients.AnyAsync(c => c.id == order.client_id))
+            if (!await _context.clients.AnyAsync(c => c.Id == order.ClientId))
                 return -1;
 
             Order newOrder = new Order
             {
-                id = id,
-                cost = order.cost,
-                date = order.date,
-                time = order.time,
-                client_id = order.client_id,
-                status = newStatus
+                Id = id,
+                Cost = order.Cost,
+                Date = order.Date,
+                Time = order.Time,
+                ClientId = order.ClientId,
+                Status = newStatus
             };
 
             _context.Entry(newOrder).State = EntityState.Modified;
@@ -175,7 +175,7 @@ namespace Infrastructure.Services
 
         public bool OrderExists(int id)
         {
-            return _context.orders.Any(e => e.id == id);
+            return _context.orders.Any(e => e.Id == id);
         }
     }
 }

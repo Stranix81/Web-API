@@ -9,18 +9,18 @@ namespace Core.DTOs
         /// </summary>
         [MaxLength(15)]
         [Required]
-        public string name { get; set; } = "Ivan";
+        public string Name { get; set; } = "Ivan";
 
         /// <summary>
         /// Client lastname
         /// </summary>
         [MaxLength(20)]
-        public string lastname { get; set; } = "Ivanov";
+        public string Lastname { get; set; } = "Ivanov";
 
         /// <summary>
         /// Client birth date
         /// </summary>
         [Required]
-        public DateOnly birth_date { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+        public DateOnly BirthDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
     }
 }

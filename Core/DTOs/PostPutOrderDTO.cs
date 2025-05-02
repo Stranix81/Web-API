@@ -4,16 +4,16 @@ namespace Core.DTOs
 {
     public class PostPutOrderDTO
     {
-        public decimal cost { get; set; }
+        public decimal Cost { get; set; }
 
-        public DateOnly date { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+        public DateOnly Date { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 
-        public TimeOnly time { get; set; } = TimeOnly.FromDateTime(DateTime.Now);
+        public TimeOnly Time { get; set; } = TimeOnly.FromDateTime(DateTime.Now);
 
         [Required]
-        public int client_id { get; set; }
+        public int ClientId { get; set; }
 
         [RegularExpression("(Pending|Cancelled|Completed)", ErrorMessage = "Status must be 'Pending', 'Cancelled', or 'Completed'")]
-        public string status { get; set; } = "Pending";
+        public string Status { get; set; } = "Pending";
     }
 }

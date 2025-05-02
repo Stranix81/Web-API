@@ -10,31 +10,31 @@ namespace Core.DTOs
 
         public GetOrderDTO(Order order)
         {
-            id = order.id;
-            cost = order.cost;
-            date = order.date;
-            time = order.time;
-            client_id = order.client_id;
-            status = order.status;
+            Id = order.Id;
+            Cost = order.Cost;
+            Date = order.Date;
+            Time = order.Time;
+            ClientId = order.ClientId;
+            Status = order.Status;
         }
 
         [JsonPropertyOrder(1)]
-        public int id { get; set; }
+        public int Id { get; set; }
 
         [JsonPropertyOrder(2)]
-        public decimal cost { get; set; }
+        public decimal Cost { get; set; }
 
         [JsonPropertyOrder(3)]
-        public DateOnly date { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+        public DateOnly Date { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 
         [JsonPropertyOrder(4)]
-        public TimeOnly time { get; set; } = TimeOnly.FromDateTime(DateTime.Now);
+        public TimeOnly Time { get; set; } = TimeOnly.FromDateTime(DateTime.Now);
 
         [JsonPropertyOrder(5)]
-        public int client_id { get; set; }
+        public int ClientId { get; set; }
 
         [JsonPropertyOrder(7)]
-        public OrderStatus status { get; set; }
+        public OrderStatus Status { get; set; }
     }
 
     public class GetOrderWithClientDTO : GetOrderDTO
@@ -43,16 +43,16 @@ namespace Core.DTOs
 
         public GetOrderWithClientDTO(Order order)
         {
-            id = order.id;
-            cost = order.cost;
-            date = order.date;
-            time = order.time;
-            client_id = order.client_id;
-            status = order.status;
-            client = new GetClientDTO(order.client);
+            Id = order.Id;
+            Cost = order.Cost;
+            Date = order.Date;
+            Time = order.Time;
+            ClientId = order.ClientId;
+            Status = order.Status;
+            Client = new GetClientDTO(order.Client);
         }
 
         [JsonPropertyOrder(6)]
-        public GetClientDTO client { get; set; }
+        public GetClientDTO Client { get; set; }
     }
 }

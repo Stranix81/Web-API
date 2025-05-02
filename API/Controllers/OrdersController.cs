@@ -5,7 +5,6 @@ using Core.DTOs.Filters;
 using Infrastructure.Interfaces;
 using NSwag.Annotations;
 
-
 namespace API.Controllers
 {
     /// <summary>
@@ -123,7 +122,7 @@ namespace API.Controllers
          
             return order == null 
                 ? BadRequest("Status or client validation error")
-                : CreatedAtAction(nameof(GetOrder), new { id = order.id }, order);
+                : CreatedAtAction(nameof(GetOrder), new { id = order.Id }, order);
         }
 
         // PUT: api/Orders/5

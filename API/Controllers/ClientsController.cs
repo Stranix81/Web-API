@@ -86,7 +86,7 @@ namespace API.Controllers
         {
             var client = await _clientService.PostClientAsync(dto);
 
-            return CreatedAtAction(nameof(GetClient), new { id = client.id }, client);
+            return CreatedAtAction(nameof(GetClient), new { id = client.Id }, client);
         }
 
         // PUT: api/Clients/5
