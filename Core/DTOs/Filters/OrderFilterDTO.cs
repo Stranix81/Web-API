@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using Core.Enums;
 
 namespace Core.DTOs.Filters
 {
@@ -15,27 +11,35 @@ namespace Core.DTOs.Filters
         /// <summary>
         /// Order cost
         /// </summary>
-        public decimal? cost { get; set; }
+        public decimal? Cost { get; set; }
 
         /// <summary>
         /// Order date
         /// </summary>
-        public DateOnly? date { get; set; }
+        public DateOnly? Date { get; set; }
 
         /// <summary>
         /// Order time
         /// </summary>
-        public TimeOnly? time { get; set; }
+        public TimeOnly? Time { get; set; }
 
         /// <summary>
         /// Order client ID
         /// </summary>
-        public int? client_id { get; set; }
+        public int? ClientId { get; set; }
+
+        ///// <summary>
+        ///// Order status
+        ///// </summary>
+        //[RegularExpression("(Pending|Cancelled|Completed)",
+        //    ErrorMessage = "Status must be 'Pending', 'Cancelled', or 'Completed'")]
+        //public string? Status { get; set; }
 
         /// <summary>
         /// Order status
         /// </summary>
-        [RegularExpression("(Pending|Cancelled|Completed)", ErrorMessage = "Status must be 'Pending', 'Cancelled', or 'Completed'")]
-        public string? status { get; set; }
+        [RegularExpression("(Pending|Cancelled|Completed)",
+            ErrorMessage = "Status must be 'Pending', 'Cancelled', or 'Completed'")]
+        public OrderStatus? Status { get; set; }
     }
 }

@@ -34,12 +34,12 @@ namespace Infrastructure.Services
         {
             var query = _context.clients.AsQueryable();
 
-            if (filter.name != null)
-                query = query.Where(с => с.Name == filter.name);
-            if (filter.lastname != null)
-                query = query.Where(с => с.Lastname == filter.lastname);
-            if (filter.birth_date != null)
-                query = query.Where(с => с.BirthDate == filter.birth_date);
+            if (filter.Name != null)
+                query = query.Where(с => с.Name == filter.Name);
+            if (filter.Lastname != null)
+                query = query.Where(с => с.Lastname == filter.Lastname);
+            if (filter.BirthDate != null)
+                query = query.Where(с => с.BirthDate == filter.BirthDate);
 
 
             var page = pagination.Page;

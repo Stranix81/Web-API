@@ -16,17 +16,17 @@ namespace Core.DTOs.Filters
         /// Client name
         /// </summary>
         [MaxLength(15)]
-        public string? name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// Client lastname
         /// </summary>
         [MaxLength(20)]
-        public string? lastname { get; set; }
+        public string? Lastname { get; set; }
 
         /// <summary>
         /// Client birth date
         /// </summary>
-        public DateOnly? birth_date { get; set; }
+        public DateOnly? BirthDate { get; set; }
     }
 }

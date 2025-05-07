@@ -51,16 +51,19 @@ namespace Infrastructure.Services
         {
             var query = _context.orders.AsQueryable();
 
-            if (filter.cost != null)
-                query = query.Where(o => o.Cost == filter.cost);
-            if (filter.date != null)
-                query = query.Where(o => o.Date == filter.date);
-            if (filter.time != null)
-                query = query.Where(o => o.Time == filter.time);
-            if (filter.client_id != null)
-                query = query.Where(o => o.ClientId == filter.client_id);
-            if (filter.status != null && Enum.TryParse<OrderStatus>(filter.status, out var statusFilter))
-                query = query.Where(o => o.Status.ToString() == filter.status);
+            if (filter.Cost != null)
+                query = query.Where(o => o.Cost == filter.Cost);
+            if (filter.Date != null)
+                query = query.Where(o => o.Date == filter.Date);
+            if (filter.Time != null)
+                query = query.Where(o => o.Time == filter.Time);
+            if (filter.ClientId != null)
+                query = query.Where(o => o.ClientId == filter.ClientId);
+            //if (filter.Status != null && Enum.TryParse<OrderStatus>(filter.Status, out var statusFilter))
+            //    query = query.Where(o => o.Status.ToString() == filter.Status);
+
+            if (filter.Status != null)
+                query = query.Where(o => o.Status == filter.Status);
 
             var page = pagination.Page;
             var pageSize = pagination.PageSize;
