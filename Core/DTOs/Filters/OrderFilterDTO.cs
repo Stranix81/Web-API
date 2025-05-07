@@ -38,8 +38,6 @@ namespace Core.DTOs.Filters
         /// <summary>
         /// Order status
         /// </summary>
-        [RegularExpression("(Pending|Cancelled|Completed)",
-            ErrorMessage = "Status must be 'Pending', 'Cancelled', or 'Completed'")]
         public OrderStatus? Status { get; set; }
     }
 }
