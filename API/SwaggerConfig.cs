@@ -7,8 +7,16 @@ using System.Reflection;
 
 namespace API
 {
+    /// <summary>
+    /// Swagger configurator
+    /// </summary>
     public static class SwaggerConfig
     {
+        /// <summary>
+        /// Configures swagger
+        /// <para> Adding XML comments and swagger documentation, mapping types and model examples</para>
+        /// </summary>
+        /// <param name="services">The type being extended</param>
         public static void ConfigureSwagger(this IServiceCollection services)
         {
             services.AddSwaggerGen(c =>
@@ -29,7 +37,7 @@ namespace API
 
         private static void AddSwaggerDoc(SwaggerGenOptions c)
         {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "PostgreSQL API", Version = "v1" });
         }
 
         private static void ConfigureDataTypes(SwaggerGenOptions c)

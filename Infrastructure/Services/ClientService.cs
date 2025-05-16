@@ -4,7 +4,7 @@ using Core.DTOs;
 using Core.DTOs.Filters;
 using Core.Models;
 using Infrastructure.Data;
-     
+
 namespace Infrastructure.Services
 {
     public class ClientService : IClientService
@@ -27,7 +27,8 @@ namespace Infrastructure.Services
         {
             var client = await _context.clients.FindAsync(id);
             return client != null
-                ? new GetClientDTO(client) : null;
+                ? new GetClientDTO(client) 
+                : null;
         }
 
         public async Task<IEnumerable<GetClientDTO>> GetClientsFilteredAsync(ClientFilterDTO filter, PaginationDTO pagination)

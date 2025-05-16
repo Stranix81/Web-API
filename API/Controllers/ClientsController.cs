@@ -95,7 +95,7 @@ namespace API.Controllers
         /// Update the client by its ID
         /// </summary>
         /// <param name="id">Client ID</param>
-        /// <param name="client">Client info</param>
+        /// <param name="dto">Client info</param>
         /// <response code="204">The client has been updated</response>>
         /// <response code="400">The Id field must remain the same</response>>
         /// <response code="404">The client was not found</response>>
