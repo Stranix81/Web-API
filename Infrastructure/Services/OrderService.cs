@@ -53,20 +53,23 @@ namespace Infrastructure.Services
             {
                 throw new ArgumentNullException(nameof(filter));
             }
-            //ArgumentNullException.ThrowIfNull(filter);
-            ArgumentNullException.ThrowIfNull(pagination);
+            if (filter is null)
+            {
+                throw new ArgumentNullException(nameof(pagination));
+            }
+
 
             var query = _context.orders.AsQueryable();
 
-            if (filter.Cost is not null)
+            if (filter?.Cost is not null)
                 query = query.Where(o => o.Cost == filter.Cost);
-            if (filter.Date is not null)
+            if (filter?.Date is not null)
                 query = query.Where(o => o.Date == filter.Date);
-            if (filter.Time is not null)
+            if (filter?.Time is not null)
                 query = query.Where(o => o.Time == filter.Time);
-            if (filter.ClientId is not null)
+            if (filter?.ClientId is not null)
                 query = query.Where(o => o.ClientId == filter.ClientId);
-            if (filter.Status is not null)
+            if (filter?.Status is not null)
                 query = query.Where(o => o.Status == filter.Status);
 
             var page = pagination.Page;
@@ -102,7 +105,10 @@ namespace Infrastructure.Services
 
         public async Task<GetOrderDTO?> PostOrderAsync(PostPutOrderDTO dto)
         {
-            ArgumentNullException.ThrowIfNull(dto);
+            if (dto is null)
+            {
+                throw new ArgumentNullException(nameof(dto));
+            }
 
             if (!Enum.TryParse(dto.Status, out OrderStatus status))
             {
@@ -129,7 +135,10 @@ namespace Infrastructure.Services
 
         public async Task<int> PutOrderAsync(int id, PostPutOrderDTO order)
         {
-            ArgumentNullException.ThrowIfNull(order);
+            if (order is null)
+            {
+                throw new ArgumentNullException(nameof(order));
+            }
 
             if (!Enum.TryParse(order.Status, out OrderStatus newStatus))
             {
