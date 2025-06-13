@@ -49,7 +49,11 @@ namespace Infrastructure.Services
 
         public async Task<IEnumerable<GetOrderDTO>> GetOrdersFilteredAsync(OrderFilterDTO filter, PaginationDTO pagination)
         {
-            ArgumentNullException.ThrowIfNull(filter);
+            if(filter is null)
+            {
+                throw new ArgumentNullException(nameof(filter));
+            }
+            //ArgumentNullException.ThrowIfNull(filter);
             ArgumentNullException.ThrowIfNull(pagination);
 
             var query = _context.orders.AsQueryable();
