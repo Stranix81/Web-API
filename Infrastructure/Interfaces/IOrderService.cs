@@ -18,7 +18,7 @@ namespace Infrastructure.Interfaces
         /// <param name="id">Order ID</param>
         /// <param name="IncludeClientInfo">Flag to include client info</param>
         /// <returns><see cref="GetOrderDTO"/> order, or <see langword="null"/></returns>
-        Task<GetOrderDTO> GetOrderAsync(int id, bool IncludeClientInfo = false);
+        Task<GetOrderDTO?> GetOrderAsync(int id, bool IncludeClientInfo = false);
 
         /// <summary>
         /// Get orders by <paramref name="filter"/> and <paramref name="pagination"/>
@@ -45,7 +45,7 @@ namespace Infrastructure.Interfaces
         /// </summary>
         /// <param name="dto">Order info</param>
         /// <returns><see cref="GetOrderDTO"/> object for success, <see langword="null"/> for validation error</returns>
-        Task<GetOrderDTO> PostOrderAsync(PostPutOrderDTO dto);
+        Task<GetOrderDTO?> PostOrderAsync(PostPutOrderDTO dto);
 
         /// <summary>
         /// Edit an order by <paramref name="id"/>

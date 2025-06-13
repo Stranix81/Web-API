@@ -25,7 +25,7 @@ namespace Infrastructure.Services
                 .ToListAsync();
         }
 
-        public async Task<GetOrderDTO> GetOrderAsync(int id, bool IncludeClientInfo = false)
+        public async Task<GetOrderDTO?> GetOrderAsync(int id, bool IncludeClientInfo = false)
         {
             var query = _context.orders.Where(o => o.Id == id);
 
@@ -37,7 +37,7 @@ namespace Infrastructure.Services
 
             var order = await query.FirstOrDefaultAsync();
 
-            if (order == null)
+            if (order is null)
             {
                 return null;
             }
@@ -51,18 +51,16 @@ namespace Infrastructure.Services
         {
             var query = _context.orders.AsQueryable();
 
-            if (filter.Cost != null)
+            if (filter?.Cost is not null)
                 query = query.Where(o => o.Cost == filter.Cost);
-            if (filter.Date != null)
+            if (filter?.Date is not null)
                 query = query.Where(o => o.Date == filter.Date);
-            if (filter.Time != null)
+            if (filter?.Time is not null)
                 query = query.Where(o => o.Time == filter.Time);
-            if (filter.ClientId != null)
+            if (filter?.ClientId is not null)
                 query = query.Where(o => o.ClientId == filter.ClientId);
-            //if (filter.Status != null && Enum.TryParse<OrderStatus>(filter.Status, out var statusFilter))
-            //    query = query.Where(o => o.Status.ToString() == filter.Status);
 
-            if (filter.Status != null)
+            if (filter?.Status is not null)
                 query = query.Where(o => o.Status == filter.Status);
 
             var page = pagination.Page;
@@ -96,7 +94,7 @@ namespace Infrastructure.Services
             return costs;
         }
 
-        public async Task<GetOrderDTO> PostOrderAsync(PostPutOrderDTO dto)
+        public async Task<GetOrderDTO?> PostOrderAsync(PostPutOrderDTO dto)
         {
             if (!Enum.TryParse(dto.Status, out OrderStatus status))
             {
@@ -165,7 +163,7 @@ namespace Infrastructure.Services
         public async Task<bool> DeleteOrderAsync(int id)
         {
             var order = await _context.orders.FindAsync(id);
-            if (order == null)
+            if (order is null)
             {
                 return false;
             }
